@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ポケモンクイズ</title>
+
+<style>
+body{
+    font-family: sans-serif;
+    background:#f2f2f2;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+}
+
+.question{
+    margin-bottom:25px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    font-size:18px;
+    background:#ffcb05;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+#result{
+    margin-top:30px;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>⚡ ポケモンクイズ ⚡</h1>
+
+<div class="question">
+<p>Q1. ピカチュウのタイプは？</p>
+
+<label><input type="radio" name="q1" value="0"> ほのお</label><br>
+<label><input type="radio" name="q1" value="1"> でんき</label><br>
+<label><input type="radio" name="q1" value="0"> みず</label>
+</div>
+
+<div class="question">
+<p>Q2. フシギダネのタイプに含まれるのは？</p>
+
+<label><input type="radio" name="q2" value="1"> くさ</label><br>
+<label><input type="radio" name="q2" value="0"> じめん</label><br>
+<label><input type="radio" name="q2" value="0"> こおり</label>
+</div>
+
+<div class="question">
+<p>Q3. リザードンの最終進化前は？</p>
+
+<label><input type="radio" name="q3" value="0"> ゼニガメ</label><br>
+<label><input type="radio" name="q3" value="1"> リザード</label><br>
+<label><input type="radio" name="q3" value="0"> バタフリー</label>
+</div>
+
+<div class="question">
+<p>Q4. ミュウツーは何地方で初登場？</p>
+
+<label><input type="radio" name="q4" value="1"> カントー</label><br>
+<label><input type="radio" name="q4" value="0"> ジョウト</label><br>
+<label><input type="radio" name="q4" value="0"> ホウエン</label>
+</div>
+
+<div class="question">
+<p>Q5. コイキングが進化するポケモンは？</p>
+
+<label><input type="radio" name="q5" value="0"> ラプラス</label><br>
+<label><input type="radio" name="q5" value="1"> ギャラドス</label><br>
+<label><input type="radio" name="q5" value="0"> シャワーズ</label>
+</div>
+
+<button onclick="checkQuiz()">結果を見る</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+function checkQuiz(){
+
+    let score = 0;
+
+    for(let i=1;i<=5;i++){
+
+        let answer =
+        document.querySelector(
+            `input[name="q${i}"]:checked`
+        );
+
+        if(answer){
+            score += Number(answer.value);
+        }
+    }
+
+    let percent = score * 20;
+
+    let rank = "";
+
+    if(percent === 100){
+        rank = "🏆 ポケモンマスター";
+    }
+    else if(percent >= 80){
+        rank = "⭐ 博士クラス";
+    }
+    else if(percent >= 60){
+        rank = "👍 トレーナークラス";
+    }
+    else{
+        rank = "😅 もっと冒険しよう";
+    }
+
+    document.getElementById("result").innerHTML =
+    `
+    ${score}/5問正解<br>
+    ${percent}点<br><br>
+    ${rank}
+    `;
+}
+</script>
+
+</body>
+</html>
