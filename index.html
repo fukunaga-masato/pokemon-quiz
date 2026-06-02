@@ -78,10 +78,54 @@ video{
 <body>
 
 <div class="card">
+<div id="menuArea">
 
+    <h2 style="text-align:center;">
+        💕 2周年記念 💕
+    </h2>
+
+    <div style="text-align:center;">
+
+        <button onclick="startQuiz()"
+                style="margin:10px;width:250px;height:60px;">
+            クイズを解く
+        </button>
+
+        <br>
+
+        <button onclick="showOpeningVideo()"
+                style="margin:10px;width:250px;height:60px;">
+            動画を見る
+        </button>
+
+    </div>
+
+</div>
+<div id="openingArea"
+     style="display:none;">
+
+    <h2>💕 Opening Movie 💕</h2>
+
+    <video id="openingVideo"
+           controls
+           autoplay>
+
+        <source
+            src="Opening.mp4"
+            type="video/mp4">
+
+    </video>
+
+    <br><br>
+
+    <button onclick="backToMenu()">
+        メニューへ戻る
+    </button>
+
+</div>
 <h1>💕 2周年記念クイズ 💕</h1>
 
-<div id="quizArea">
+<div id="quizArea" style="display: none;">
 
 <div id="progress"></div>
 
@@ -369,8 +413,43 @@ function finishQuiz(){
         `;
     }
 }
+function startQuiz(){
 
-renderQuestion();
+    document.getElementById("menuArea")
+        .style.display = "none";
+
+    document.getElementById("quizArea")
+        .style.display = "block";
+
+    renderQuestion();
+}
+
+function showOpeningVideo(){
+
+    document.getElementById("menuArea")
+        .style.display = "none";
+
+    document.getElementById("openingArea")
+        .style.display = "block";
+
+    document.getElementById("openingVideo")
+        .play();
+}
+
+function backToMenu(){
+
+    document.getElementById("openingArea")
+        .style.display = "none";
+
+    document.getElementById("menuArea")
+        .style.display = "block";
+
+    const video =
+        document.getElementById("openingVideo");
+
+    video.pause();
+    video.currentTime = 0;
+}
 
 </script>
 
