@@ -46,6 +46,7 @@ body{
     box-shadow:
     0 8px 30px rgba(0,0,0,0.4);
 
+    overflow:hidden;
 }
 
 h1{
@@ -108,7 +109,56 @@ button{
 
     margin-top:15px;
 }
+video{
 
+    width:100%;
+
+    max-width:100%;
+
+    height:auto;
+
+    display:block;
+
+    margin:auto;
+
+    border-radius:15px;
+
+    object-fit:contain;
+
+    box-shadow:
+    0 8px 30px rgba(0,0,0,.4);
+
+}
+.loader{
+
+    width:60px;
+    height:60px;
+
+    border:6px solid rgba(255,255,255,.2);
+
+    border-top:
+    6px solid #ec4899;
+
+    border-radius:50%;
+
+    margin:auto;
+
+    animation:
+    spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
 </style>
 </head>
 
@@ -160,7 +210,9 @@ button{
     </button>
 
 </div>
-<h1>💕 2周年記念クイズ 💕</h1>
+<div id="quizTitle" style="display:none;">
+    <h1>💕 2周年記念クイズ 💕</h1>
+</div>
 
 <div id="quizArea" style="display: none;">
 
@@ -182,10 +234,17 @@ button{
 
     <h2 id="videoTitle"></h2>
 
-    <video id="rewardVideo" controls autoplay>
+    <video id="rewardVideo" controls autoplay autoplay style="display:none;">
         <source src="" type="video/mp4">
     </video>
+    <div id="loadingArea"
+    style="display:none;text-align:center;">
 
+        <h2>採点中...</h2>
+
+        <div class="loader"></div>
+
+    </div>
     <div id="actionArea" style="display:none;margin-top:20px;">
 
         <button
@@ -226,45 +285,48 @@ a:0
 let current = 0;
 let score = 0;
 let selected = -1;
-function playEnding(){
+function startQuiz(){
+    document.getElementById(
+        "quizTitle"
+    ).style.display = "block";
+    document.getElementById(
+        "menuArea"
+    ).style.display = "none";
 
-    const title =
-        document.getElementById("videoTitle");
+    document.getElementById(
+        "openingArea"
+    ).style.display = "none";
 
-    const video =
-        document.getElementById("rewardVideo");
+    document.getElementById(
+        "quizArea"
+    ).style.display = "block";
 
-    const source =
-        video.querySelector("source");
+    renderQuestion();
+}
+function showOpeningVideo(){
 
-    document.getElementById("actionArea")
-        .style.display = "none";
+    document.getElementById(
+        "menuArea"
+    ).style.display = "none";
 
-    title.innerText =
-        "💕 2年間ありがとう 💕";
+    document.getElementById(
+        "openingArea"
+    ).style.display = "block";
 
-    source.src = "Ending.mp4";
+    document.getElementById(
+        "quizArea"
+    ).style.display = "none";
+}
 
-    video.load();
+function backToMenu(){
 
-    video.play();
+    document.getElementById(
+        "openingArea"
+    ).style.display = "none";
 
-    video.onended = function(){
-
-        title.innerHTML=
-        `
-        <h1>
-        2年間ありがとう💕
-        </h1>
-
-        <p>
-        これからも
-        よろしくね
-        </p>
-        `;
-
-    };
-
+    document.getElementById(
+        "menuArea"
+    ).style.display = "block";
 }
 function renderQuestion(){
 
@@ -280,200 +342,270 @@ function renderQuestion(){
 
         html += `
         <label class="choice">
+
             <input
                 type="radio"
                 name="answer"
                 value="${index}"
                 onchange="selected=${index}"
             >
+
             ${choice}
+
         </label>
         `;
     });
 
-    document.getElementById("choices").innerHTML = html;
+    document.getElementById("choices").innerHTML =
+        html;
 }
 
 function nextQuestion(){
 
     if(selected === -1){
-        alert("選択肢を選んでください！");
+
+        alert("選択肢を選んでください");
+
         return;
     }
 
     if(selected === questions[current].a){
+
         score++;
+
     }
 
     selected = -1;
+
     current++;
 
     if(current < questions.length){
+
         renderQuestion();
+
     }
     else{
+
         finishQuiz();
+
     }
 }
 
 function finishQuiz(){
 
     const percent =
-        Math.round(score / questions.length * 100);
+        Math.round(
+            score / questions.length * 100
+        );
 
-    document.getElementById("quizArea").style.display = "none";
-    document.getElementById("videoArea").style.display = "block";
+    document.getElementById(
+        "quizArea"
+    ).style.display = "none";
+
+    document.getElementById(
+        "videoArea"
+    ).style.display = "block";
+
+    document.getElementById(
+        "loadingArea"
+    ).style.display = "block";
 
     const video =
-        document.getElementById("rewardVideo");
+        document.getElementById(
+            "rewardVideo"
+        );
 
     const source =
-        video.querySelector("source");
+        video.querySelector(
+            "source"
+        );
 
     const title =
-        document.getElementById("videoTitle");
-
-    const retryBtn =
-        document.getElementById("retryBtn");
-
-    const endingBtn =
-        document.getElementById("endingBtn");
+        document.getElementById(
+            "videoTitle"
+        );
 
     const actionArea =
-        document.getElementById("actionArea");
+        document.getElementById(
+            "actionArea"
+        );
+
+    const retryBtn =
+        document.getElementById(
+            "retryBtn"
+        );
+
+    const endingBtn =
+        document.getElementById(
+            "endingBtn"
+        );
+
+    title.innerHTML = "";
+
+    retryBtn.style.display = "none";
+    endingBtn.style.display = "none";
+    actionArea.style.display = "none";
 
     if(percent === 100){
-
-        title.innerText =
-            "🎉 全問正解おめでとう！ 🎉";
 
         source.src = "collect.mp4";
 
         video.load();
 
+        setTimeout(()=>{
+
+            document.getElementById(
+                "loadingArea"
+            ).style.display = "none";
+
+            video.style.display =
+                "block";
+
+            video.play();
+
+        },3000);
+
         video.onended = function(){
 
             launchCelebration();
 
-            title.innerHTML =
-            `
+            title.innerHTML = `
             <h2>
-            💯 100点！
+                💯 ${percent}点
             </h2>
 
             <p>
-            全問正解おめでとう💕
+                全問正解おめでとう💕
             </p>
             `;
 
             actionArea.style.display =
-            "block";
+                "block";
 
             endingBtn.style.display =
-            "inline-block";
+                "inline-block";
 
         };
 
     }
     else{
 
-        title.innerText =
-            `${percent}点\nもうちょっと頑張ってほしいな♡`;
-
         source.src = "nop.mp4";
 
         video.load();
 
+        setTimeout(()=>{
+
+            document.getElementById(
+                "loadingArea"
+            ).style.display = "none";
+
+            video.style.display =
+                "block";
+
+            video.play();
+
+        },3000);
+
         video.onended = function(){
 
-            title.innerHTML =
-            `
+            title.innerHTML = `
             <h2>
-            ${percent}点
+                ${percent}点
             </h2>
 
             <p>
-            もうちょっと
-            頑張ってほしいな♡
+                もうちょっと
+                頑張ってほしいな♡
             </p>
             `;
 
             actionArea.style.display =
-            "block";
+                "block";
 
             retryBtn.style.display =
-            "inline-block";
+                "inline-block";
 
         };
 
     }
-
-    video.play();
-}
-function startQuiz(){
-
-    document.getElementById("menuArea")
-        .style.display = "none";
-
-    document.getElementById("quizArea")
-        .style.display = "block";
-
-    renderQuestion();
 }
 
-function showOpeningVideo(){
-
-    document.getElementById("menuArea")
-        .style.display = "none";
-
-    document.getElementById("openingArea")
-        .style.display = "block";
-
-    document.getElementById("openingVideo")
-        .play();
-}
-
-function backToMenu(){
-
-    document.getElementById("openingArea")
-        .style.display = "none";
-
-    document.getElementById("menuArea")
-        .style.display = "block";
+function playEnding(){
 
     const video =
-        document.getElementById("openingVideo");
+        document.getElementById(
+            "rewardVideo"
+        );
 
-    video.pause();
-    video.currentTime = 0;
+    const source =
+        video.querySelector(
+            "source"
+        );
+
+    const title =
+        document.getElementById(
+            "videoTitle"
+        );
+
+    document.getElementById(
+        "actionArea"
+    ).style.display = "none";
+
+    title.innerHTML = "";
+
+    source.src = "Ending.mp4";
+
+    video.load();
+
+    video.play();
+
+    video.onended = function(){
+
+        title.innerHTML = `
+        <h1>
+            2年間ありがとう💕
+        </h1>
+
+        <p>
+            これからも
+            よろしくね
+        </p>
+        `;
+
+    };
+
 }
+
 function launchCelebration(){
 
     const canvas =
-    document.getElementById(
-        "confettiCanvas"
-    );
+        document.getElementById(
+            "confettiCanvas"
+        );
 
     const ctx =
-    canvas.getContext("2d");
+        canvas.getContext("2d");
 
     canvas.width =
-    window.innerWidth;
+        window.innerWidth;
 
     canvas.height =
-    window.innerHeight;
+        window.innerHeight;
 
-    const particles=[];
+    const particles = [];
 
     for(let i=0;i<250;i++){
 
         particles.push({
 
             x:
-            Math.random()*canvas.width,
+            Math.random() *
+            canvas.width,
 
             y:
-            Math.random()*canvas.height,
+            Math.random() *
+            canvas.height,
 
             r:
             Math.random()*6+4,
@@ -500,9 +632,9 @@ function launchCelebration(){
         particles.forEach(p=>{
 
             ctx.fillStyle =
-            Math.random()>0.5
-            ? "#ff4da6"
-            : "#ffd700";
+                Math.random() > 0.5
+                ? "#ff4da6"
+                : "#ffd700";
 
             ctx.beginPath();
 
@@ -511,7 +643,7 @@ function launchCelebration(){
                 p.y,
                 p.r,
                 0,
-                Math.PI*2
+                Math.PI * 2
             );
 
             ctx.fill();
@@ -527,8 +659,8 @@ function launchCelebration(){
     }
 
     animate();
-
 }
+
 </script>
 <canvas
 id="confettiCanvas"
