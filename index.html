@@ -273,6 +273,150 @@ video{
 <script>
 const questions = [
 
+{
+q:"記念日はいつでしょう？",
+c:["2024/05/18","2024/05/11","2024/05/25"],
+a:0
+},
+
+{
+q:"彼氏の誕生日は？",
+c:["2002/02/26","2002/02/16","2002/03/26"],
+a:0
+},
+
+{
+q:"初めて出会ったのは？",
+c:["喫煙所","道端","ホストクラブ"],
+a:0
+},
+
+{
+q:"2024/05/18にあいちゃんはお土産で餃子を買ってきてくれたね。さてそのとき一緒に食べた餃子は何でしょう？",
+c:["宇都宮みんみん","丸満餃子","正嗣餃子"],
+a:0
+},
+
+{
+q:"2024/07/15に一緒に釣りをしましたね。あいちゃんめっちゃ釣るの速かったのを覚えてます。さて、釣った魚はいくつか塩焼きにして食べましたね。では二人合わせて何匹塩焼きにしたでしょう？",
+c:["2匹","4匹","6匹"],
+a:1
+},
+
+{
+q:"2024/08/03に二人で見に行った花火大会はどこ？",
+c:["足利花火大会","鴻巣花火大会","熊谷花火大会"],
+a:0
+},
+
+{
+q:"2024/08/10にロッキンに参戦しましたね。そこで私が買ったタオルの色は？",
+c:["黄色","青色","赤色"],
+a:0
+},
+
+{
+q:"2024/09/16に仙台旅行中、あなたが瑞巌寺で食べたものは？",
+c:["カキフライ丼","かつ丼","牛タン定食"],
+a:0
+},
+
+{
+q:"2024に行ったイルミネーションはどれが一番早かったでしょう？",
+c:["足利フラワーパーク","青の洞窟","東京ドイツ村"],
+a:0
+},
+
+{
+q:"2025はあげまんのあなた、彼氏の初詣での運勢を覚えていますか？",
+c:["末吉","小吉","吉"],
+a:0
+},
+
+{
+q:"2025/03/08の伊豆旅行でツーショットをとった時の決めポーズは？",
+c:["ピグレット","指ハート","ジョジョ立ち"],
+a:0
+},
+
+{
+q:"2025/04/04の軽井沢旅行中、トリックアートミュージアムで私が盗もうとした絵画は？",
+c:["モナ・リザ","ゴッホのひまわり","ムンクの叫び"],
+a:0
+},
+
+{
+q:"１年記念日で指輪を作ったのはどこ？",
+c:["glanta","goutte dor","icci"],
+a:0
+},
+
+{
+q:"2025/08/11にあなたがIKEAで買ったものは？",
+c:["サメのタオル","サメのぬいぐるみ","でかクッション"],
+a:0
+},
+
+{
+q:"2025/09/29にあなたがベリテンで買ったタオルのアーティストは？",
+c:["Chevon","サバシスター","ヤングスキニー"],
+a:0
+},
+
+{
+q:"2025/10/12に一緒にカインズで植物を買いましたね。私はコーヒーの木を買いました。では、あなたが買った植物は？",
+c:["ガジュマル","パキラ","モンステラ"],
+a:0
+},
+
+{
+q:"2025/10/22にディズニーランドで買ったお揃いの被り物のキャラは？",
+c:["クロウハウザー","ニック","ジュディ"],
+a:0
+},
+
+{
+q:"2025/11/15に紅葉ライトアップを見に行った寺は？",
+c:["宝徳寺","鑁阿寺","永観堂"],
+a:0
+},
+
+{
+q:"2025/12/14に私たちは森をさまよってました。さて、森で出会った生き物は？",
+c:["ムーミン","高市早苗","ぐんまちゃん"],
+a:0
+},
+
+{
+q:"2025/12/20に作ったケーキの表面に貼った果物は？",
+c:["いちご","キウイ","みかん"],
+a:0
+},
+
+{
+q:"2026/02/26に大洗で二人でめっちゃ食べた海のミルクと呼ばれる魚介は？",
+c:["牡蠣","ホタテ","はまぐり"],
+a:0
+},
+
+{
+q:"2026/03/30にあなたが自身の欲望のまま購入した夢の機械は？",
+c:["ニンテンドースイッチ2","Steam Deck","PlayStation 5"],
+a:0
+},
+
+{
+q:"2026/04/04の山梨旅行の最後のほうとう屋さんで私がモノマネをしたアニメキャラは？",
+c:["碇ゲンドウ","岸辺露伴","ロックリー"],
+a:0
+},
+
+{
+q:"2026/04/29に名犬牧場で出会った食パンのなまえは？",
+c:["ピポット","ペレット","パレット"],
+a:2
+},
+
 
 
 {
@@ -328,6 +472,7 @@ function backToMenu(){
         "menuArea"
     ).style.display = "block";
 }
+
 function renderQuestion(){
 
     document.getElementById("progress").innerText =
@@ -336,28 +481,38 @@ function renderQuestion(){
     document.getElementById("question").innerText =
         questions[current].q;
 
+    const q = questions[current];
+
+    const shuffledChoices = q.c.map((choice,index)=>({
+        text: choice,
+        correct: index === q.a
+    }));
+
+    for(let i = shuffledChoices.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [shuffledChoices[i], shuffledChoices[j]] =
+        [shuffledChoices[j], shuffledChoices[i]];
+    }
+
     let html = "";
 
-    questions[current].c.forEach((choice,index)=>{
+    shuffledChoices.forEach((choice,index)=>{
 
         html += `
         <label class="choice">
-
             <input
                 type="radio"
                 name="answer"
-                value="${index}"
-                onchange="selected=${index}"
+                value="${choice.correct ? 1 : 0}"
+                onchange="selected=${choice.correct ? 1 : 0}"
             >
-
-            ${choice}
-
+            ${choice.text}
         </label>
         `;
     });
 
-    document.getElementById("choices").innerHTML =
-        html;
+    document.getElementById("choices").innerHTML = html;
 }
 
 function nextQuestion(){
@@ -369,11 +524,11 @@ function nextQuestion(){
         return;
     }
 
-    if(selected === questions[current].a){
-
+    if(selected === 1){
         score++;
+    }   
 
-    }
+    
 
     selected = -1;
 
